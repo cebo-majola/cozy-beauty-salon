@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COZYBEAUTYSALON</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navigation -->
+  <nav class="bg-pink-500 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">COZYBEAUTYSALON</h1>
+    <ul class="flex space-x-4 items-center">
+      <li>
+        <button id="btn-view-dashboard" class="hover:underline font-semibold text-yellow-200 bg-pink-700 px-3 py-1 rounded">Admin Dashboard</button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home" class="text-center py-16 bg-gradient-to-br from-pink-100 to-white">
+    <h2 class="text-5xl font-bold mb-4 text-pink-600">Welcome to COZYBEAUTYSALON</h2>
+    <p class="text-lg mb-6">Where beauty meets comfort. Pamper yourself with our premium services today!</p>
+    <div class="bg-white p-6 rounded-lg shadow-lg inline-block max-w-xl mb-8">
+      <h3 class="text-2xl font-semibold text-pink-600 mb-2">💅 This Month's Promo Specials 💇‍♀️</h3>
+      <ul class="text-left list-disc list-inside">
+        <li>20% off all nail treatments</li>
+        <li>Free deep conditioning with every hairstyle</li>
+        <li>Loyalty card: Get 1 free facial after 5 visits</li>
+      </ul>
+    </div>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a href="nails.html" class="bg-purple-500 text-white px-6 py-2 rounded shadow hover:bg-purple-600">Nails</a>
+      <a href="hairstyle.html" class="bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-600">Hairstyle</a>
+      <a href="haircut.html" class="bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-600">Haircut</a>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-16 bg-white text-center">
+    <h2 class="text-3xl font-bold mb-8">Our Services</h2>
+    <p class="text-lg">Discover all we have to offer by visiting us or clicking below.</p>
+    <a href="appointment.html" class="mt-4 inline-block bg-pink-500 text-white px-6 py-2 rounded shadow hover:bg-pink-600">Book an Appointment</a>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-16 bg-white text-center">
+    <h2 class="text-3xl font-bold mb-8">Contact Us</h2>
+    <p><strong>Hours:</strong> Mon-Sat 9am - 7pm</p>
+    <p><strong>Phone:</strong> (123) 456-7890</p>
+    <p><strong>Email:</strong> cebonmajola@gmail.com</p>
+    <p><strong>Address:</strong> 24 Lira Link, Prominade Building, Richards Bay</p>
+    <div class="mt-6">
+      <a href="https://www.google.com/maps?q=24+Lira+Link,+Prominade+Building,+Richards+Bay" target="_blank" class="inline-block bg-pink-500 text-white px-6 py-3 rounded shadow hover:bg-pink-600">View on Map</a>
+    </div>
+  </section>
+
+  <!-- Admin Login Modal -->
+  <div id="admin-login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+      <h2 class="text-xl font-bold text-pink-600 mb-4">Admin Login</h2>
+      <input id="admin-password" type="password" placeholder="Enter admin password" class="w-full border border-gray-300 p-2 rounded mb-4" />
+      <div class="flex justify-end space-x-2">
+        <button id="login-cancel" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+        <button id="login-submit" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600">Login</button>
+      </div>
+      <p id="login-error" class="text-red-600 text-sm mt-2 hidden">Incorrect password. Try again.</p>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard (Hidden) -->
+  <section id="dashboard" class="hidden p-8 bg-white max-w-7xl mx-auto my-10 rounded shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-bold text-pink-600">Admin Dashboard - Bookings</h2>
+      <button id="btn-back-home" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600">Go Back to Home</button>
+    </div>
+    <table class="min-w-full border-collapse border border-gray-300">
+      <thead>
+        <tr class="bg-pink-100 text-pink-800">
+          <th class="border border-gray-300 px-4 py-2">Name</th>
+          <th class="border border-gray-300 px-4 py-2">Email</th>
+          <th class="border border-gray-300 px-4 py-2">Service</th>
+          <th class="border border-gray-300 px-4 py-2">Date</th>
+          <th class="border border-gray-300 px-4 py-2">Time</th>
+          <th class="border border-gray-300 px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="booking-list">
+        <tr><td colspan="6" class="text-center py-4">Loading bookings...</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const dashboard = document.getElementById('dashboard');
+    const home = document.getElementById('home');
+    const services = document.getElementById('services');
+    const contact = document.getElementById('contact');
+    const bookingList = document.getElementById('booking-list');
+    const btnViewDashboard = document.getElementById('btn-view-dashboard');
+    const btnBackHome = document.getElementById('btn-back-home');
+
+    const loginModal = document.getElementById('admin-login-modal');
+    const loginSubmit = document.getElementById('login-submit');
+    const loginCancel = document.getElementById('login-cancel');
+    const loginError = document.getElementById('login-error');
+    const passwordInput = document.getElementById('admin-password');
+
+    const ADMIN_PASSWORD = 'cozyadmin';
+
+    function showHome() {
+      dashboard.classList.add('hidden');
+      home.style.display = 'block';
+      services.style.display = 'block';
+      contact.style.display = 'block';
+    }
+
+    function showDashboard() {
+      home.style.display = 'none';
+      services.style.display = 'none';
+      contact.style.display = 'none';
+      dashboard.classList.remove('hidden');
+      loadBookings();
+    }
+
+    btnViewDashboard.addEventListener('click', () => {
+      loginModal.classList.remove('hidden');
+      passwordInput.value = '';
+      loginError.classList.add('hidden');
+    });
+
+    loginCancel.addEventListener('click', () => {
+      loginModal.classList.add('hidden');
+    });
+
+    loginSubmit.addEventListener('click', () => {
+      if (passwordInput.value === ADMIN_PASSWORD) {
+        loginModal.classList.add('hidden');
+        showDashboard();
+      } else {
+        loginError.classList.remove('hidden');
+      }
+    });
+
+    btnBackHome.addEventListener('click', showHome);
+
+    async function loadBookings() {
+      bookingList.innerHTML = '<tr><td colspan="6" class="text-center py-4">Loading...</td></tr>';
+      try {
+        const res = await fetch('https://purrfect-basalt-krill.glitch.me/api/book');
+        const bookings = await res.json();
+
+        if (!Array.isArray(bookings) || bookings.length === 0) {
+          bookingList.innerHTML = '<tr><td colspan="6" class="text-center py-4">No bookings found.</td></tr>';
+          return;
+        }
+
+        bookingList.innerHTML = '';
+        bookings.forEach((booking) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="py-2 px-4 border-b border-gray-300">${booking.name}</td>
+            <td class="py-2 px-4 border-b border-gray-300">${booking.email}</td>
+            <td class="py-2 px-4 border-b border-gray-300">${booking.service}</td>
+            <td class="py-2 px-4 border-b border-gray-300">${booking.date}</td>
+            <td class="py-2 px-4 border-b border-gray-300">${booking.time}</td>
+            <td class="py-2 px-4 border-b border-gray-300 text-center">
+              <button data-id="${booking.id}" class="delete-btn bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+            </td>
+          `;
+          bookingList.appendChild(tr);
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const id = btn.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this booking?')) {
+              try {
+                const res = await fetch(`https://purrfect-basalt-krill.glitch.me/api/book/${id}`, {
+                  method: 'DELETE'
+                });
+                if (res.ok) {
+                  alert('Booking deleted.');
+                  loadBookings();
+                } else {
+                  alert('Failed to delete booking.');
+                }
+              } catch (err) {
+                alert('Error deleting booking.');
+              }
+            }
+          });
+        });
+
+      } catch (error) {
+        bookingList.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-red-600">Error loading bookings.</td></tr>';
+      }
+    }
+
+    showHome();
+  </script>
+</body>
+</html>
